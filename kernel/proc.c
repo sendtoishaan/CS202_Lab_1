@@ -702,3 +702,21 @@ procdump(void)
     printk("\n");
   }
 }
+
+// count the active processes: ready, running, waiting (sleeping) or zombie
+int
+count_active_procs(void)
+{
+  struct proc *p;
+  int count = 0;
+
+  for (p = proc; p < &proc[NPROC]; p++) {
+    acquire(&p->lock);
+    if (p->state == RUNNABLE || p->state == RUNNING ||
+        p->state == SLEEPING || p->state == ZOMBIE)
+      count++;
+    release(&p->lock);
+  }
+
+  return count;
+}

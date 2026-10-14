@@ -110,3 +110,21 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+uint64 // unsigned integer 64bit <--> register a0
+sys_sysinfo(void)
+{
+  int n;
+  argint(0, &n);
+  
+  switch (n) {
+    case 0:
+      return count_active_procs();
+    case 1:
+      return total_syscalls;
+    case 2:
+      return count_free_pages();
+    default:
+      return -1;
+  }
+}

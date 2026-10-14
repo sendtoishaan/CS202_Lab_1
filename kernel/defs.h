@@ -60,6 +60,7 @@ void            ireclaim(int);
 void*           kalloc(void);
 void            kfree(void *);
 void            kinit(void);
+int             count_free_pages(void);
 
 // log.c
 void            initlog(int, struct superblock*);
@@ -80,6 +81,7 @@ void            printkinit(void);
 
 // proc.c
 int             cpuid(void);
+int             count_active_procs(void);
 void            kexit(int);
 int             kfork(void);
 int             growproc(int);
