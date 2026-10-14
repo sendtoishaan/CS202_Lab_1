@@ -110,3 +110,37 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// proc.h states that the wait_lock must be held when using parent, so access wait_lock from proc.c. Use extern since it is in proc.c
+extern struct spinlock wait_lock; 
+
+uint64
+sys_procinfo(void)
+{
+  struct proc *p = myproc(); 
+  struct pinfo pinfo; 
+  uint64 addr; 
+  
+  acquire(&wait_lock); // proc.h states wait_lock must be held for parent
+  if (p->parent != 0) { 
+    pinfo.ppid = p->parent->pid; 
+  } else {
+    pinfo.ppid = -1;
+  }
+  release(&wait_lock); 
+  acquire(&p->lock); // proc.h states p->lock must be held for syscall_count
+  pinfo.syscall_count = p->syscall_count;
+  release(&p->lock); 
+  pinfo.page_usage = PGROUNDUP(p->sz) / PGSIZE;  // round to nearest page / divide by page size = # pages used
+  
+  argaddr(0, &addr); // get first syscall arg and store in addr, if NULL return -1
+  if (addr == 0) {  
+    return -1;
+  }
+
+  // copy pinfo to user space, if it fails return -1
+  if (copyout(p->pagetable, p->sz, addr, (char *)&pinfo, sizeof(pinfo)) < 0) {
+    return -1;
+  }
+  return 0;
+} 
