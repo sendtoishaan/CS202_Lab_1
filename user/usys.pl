@@ -44,4 +44,4 @@ entry("pause");
 entry("uptime");
 entry("sync");
 entry("sysinfo");
-
+entry("procinfo");
