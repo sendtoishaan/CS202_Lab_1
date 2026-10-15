@@ -150,8 +150,9 @@ UPROGS=\
 	$U/_forphan\
 	$U/_dorphan\
 	$U/_sync\
-  $U/_sysinfotest\
+  	$U/_sysinfotest\
 	$U/_procinfotest\
+	$U/_lab1_test\
 
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)
