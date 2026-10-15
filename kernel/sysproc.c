@@ -111,6 +111,24 @@ sys_uptime(void)
   return xticks;
 }
 
+uint64 // unsigned integer 64bit <--> register a0
+sys_sysinfo(void)
+{
+  int n;
+  argint(0, &n);
+  
+  switch (n) {
+    case 0:
+      return count_active_procs();
+    case 1:
+      return total_syscalls;
+    case 2:
+      return count_free_pages();
+    default:
+      return -1;
+  }
+}
+
 // proc.h states that the wait_lock must be held when using parent, so access wait_lock from proc.c. Use extern since it is in proc.c
 extern struct spinlock wait_lock; 
 

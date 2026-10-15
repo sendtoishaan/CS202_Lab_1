@@ -24,6 +24,7 @@ int getpid(void);
 char *sys_sbrk(int, int);
 int pause(int);
 int uptime(void);
+int sysinfo(int);
 int sync(void);
 struct pinfo;
 int procinfo(struct pinfo *);
